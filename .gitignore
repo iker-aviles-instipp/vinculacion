@@ -1,0 +1,23 @@
+# Entornos / IDE
+venv/
+.env
+.vscode
+.idea/
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.egg-info/
+*.egg
+
+# Django
+db.sqlite3
+media/
+staticfiles/
+*.log
+
+# os
+.DS_Store
+Thumbs.db

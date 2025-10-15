@@ -1,0 +1,89 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block contenido %}
+
+<div class="modal fade" id="modalEliminar" tabindex="-1" aria-labelledby="eliminarLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header bg-danger text-white">
+        <h5 class="modal-title" id="eliminarLabel">Confirmar Eliminación</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+        <button type="button" class="btn btn-danger">Eliminar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+            <div id="layoutSidenav_content">
+                <main>
+                    <div class="container-fluid px-4 " style="padding: 5px;">
+                        <h1 class="mt-4">Documentos</h1>
+                        <ol class="breadcrumb mb-4">
+                            <li class="breadcrumb-item active">Documentacion de pacientes</li>
+                        </ol>
+                        </div>
+                        <div class="card mb-4">
+                            <div class="card-header" style="text-align: center;">
+                                <i class="fas fa-table me-1"></i>
+                                HISTORIAL DE DOCUMENTACION
+                            </div>
+                            <p></p>
+                             <div class="table-responsive">
+                            <table class="table table-bordered" id="datatablesSimple">
+    <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Nombre</th>
+      <th scope="col">Apellido</th>
+      <th scope="col">Cedula</th>
+      <th scope="col">Ultima actualizacion</th>
+      <th scope="col">Visualizar Documento</th>
+      <th scope="col">Acciones</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th scope="row">1</th>
+      <td>Neymar Jr</td>
+      <td>Santos</td>
+      <td>0718561456</td>
+      <td>12/07/2025</td>
+      <td><button class="btn btn-primary">Ver</button></td>
+      <td div class="d-grid gap-2 d-md-flex justify-content-md-end">
+      <button class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#modalEliminar" title="Eliminar"><i class="bi bi-trash-fill">🗑️</i></button>    
+      </div></td>
+    </tr>
+    <tr>
+      <th scope="row">2</th>
+      <td>Lamine</td>
+      <td>Yamal</td>
+      <td>0718561456</td>
+      <td>10/07/2025</td>
+      <td><button class="btn btn-primary">Ver</button></td>
+      <td div class="d-grid gap-2 d-md-flex justify-content-md-end">
+      <button class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#modalEliminar" title="Eliminar"><i class="bi bi-trash-fill">🗑️</i></button>
+      </div></td>
+    </tr>
+    <tr>
+      <th scope="row">3</th>
+      <td>Leo</td>
+      <td>Messi</td>
+      <td>0718561456</td>
+      <td>09/07/2025</td>
+      <td><button class="btn btn-primary">Ver</button></td>
+      <td div class="d-grid gap-2 d-md-flex justify-content-md-end">
+      <button class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#modalEliminar" title="Eliminar"><i class="bi bi-trash-fill">🗑️</i></button>
+      </div></td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+
+
+{% endblock %}

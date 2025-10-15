@@ -1,0 +1,291 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block contenido %}
+
+<div class="modal fade" id="modalAgregarCita" tabindex="-1" aria-labelledby="agregarCitaLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-success text-white">
+                <h5 class="modal-title" id="agregarCitaLabel">Registrar nueva cita</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            <div class="modal-body">
+                <form id="formAgregarCita" method="post" action="{% url 'agendarCi' %}">
+                    {% csrf_token %}
+                    <div class="mb-2">
+                        <label for="nombre" class="form-label">Nombre</label>
+                        <input type="text" class="form-control" id="nombre" name="nombre" required>
+                    </div>
+                    <div class="mb-2">
+                        <label for="apellido" class="form-label">Apellido</label>
+                        <input type="text" class="form-control" id="apellido" name="apellido" required>
+                    </div>
+                    <div class="mb-2">
+                        <label for="cedula" class="form-label">Cédula</label>
+                        <input type="text" class="form-control" id="cedula" name="cedula" required>
+                    </div>
+                    <div class="mb-2">
+                        <label for="direccion" class="form-label">Dirección</label>
+                        <input type="text" class="form-control" id="direccion" name="direccion" required>
+                    </div>
+                    <div class="mb-2">
+                        <label for="celular" class="form-label">Celular</label>
+                        <input type="text" class="form-control" id="celular" name="celular" required>
+                    </div>
+                    <div class="mb-2">
+                        <label for="fecha_nacimiento" class="form-label">Fecha de Nacimiento</label>
+                        <input type="date" class="form-control" id="fecha_nacimiento" name="fecha_nacimiento" required>
+                    </div>
+                    <div class="mb-2">
+                        <label for="estado_civil" class="form-label">Estado Civil</label>
+                        <select class="form-control" id="estado_civil" name="estado_civil" required>
+                            <option value="soltero">Soltero</option>
+                            <option value="casado">Casado</option>
+                            <option value="divorciado">Divorciado</option>
+                            <option value="union_libre">Unión Libre</option>
+                            <option value="viudo">Viudo</option>
+                        </select>
+                    </div>
+                    <div class="mb-2">
+                        <label for="tipo_sangre" class="form-label">Tipo de Sangre</label>
+                        <input type="text" class="form-control" id="tipo_sangre" name="tipo_sangre" required>
+                    </div>
+                    <div class="mb-2">
+                        <label for="correo" class="form-label">Correo Electrónico</label>
+                        <input type="email" class="form-control" id="correo" name="correo" required>
+                    </div>
+                    <div class="mb-2">
+                        <label for="fecha_cita" class="form-label">Fecha de Cita</label>
+                        <input type="date" class="form-control" id="fecha_cita" name="fecha_cita" required>
+                    </div>
+                    <div class="mb-2">
+                        <label for="hora_cita" class="form-label">Hora de Cita</label>
+                        <input type="time" class="form-control" id="hora_cita" name="hora_cita" required>
+                    </div>
+                    <div class="mb-2">
+                        <label for="tipo_tratamiento" class="form-label">Tipo de Tratamiento</label>
+                        <input type="text" class="form-control" id="tipo_tratamiento" name="tipo_tratamiento" required>
+                    </div>
+                    <div class="mb-2">
+                        <label for="estado" class="form-label">Estado</label>
+                        <select class="form-control" id="estado" name="estado" required>
+                            <option value="activo">Activo</option>
+                            <option value="inactivo">Inactivo</option>
+                            <option value="completado">Completado</option>
+                            <option value="cancelado">Cancelado</option>
+                        </select>
+                    </div>
+                    <div class="text-end">
+
+                       <button type="submit" class="btn btn-primary">Guardar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="modalEditar" tabindex="-1" aria-labelledby="editarLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-warning">
+                <h5 class="modal-title" id="editarLabel">Editar Información</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            <div class="modal-body">
+                <form id="formEditarCita" method="post" action="{% url 'agendarCi' %}">
+                    {% csrf_token %}
+                    <input type="hidden" id="edit_cita_id" name="cita_id">
+                    <div class="mb-2">
+                        <label class="form label" for="edit_nombre">Nombres:</label>
+                        <input class="form-control" type="text" id="edit_nombre" name="nombre" required>
+                    </div>
+                    <div class="mb-2">
+                        <label class="form label" for="edit_apellido">Apellido:</label>
+                        <input class="form-control" type="text" id="edit_apellido" name="apellido" required>
+                    </div>
+                    <div class="mb-2">
+                        <label class="form-label" for="edit_cedula">Cédula:</label>
+                        <input class="form-control" type="text" id="edit_cedula" name="cedula" required>
+                    </div>
+                    <div class="mb-2">
+                        <label class="form-label" for="edit_direccion">Dirección:</label>
+                        <input class="form-control" type="text" id="edit_direccion" name="direccion" required>
+                    </div>
+                    <div class="mb-2">
+                        <label class="form-label" for="edit_celular">Celular:</label>
+                        <input class="form-control" type="text" id="edit_celular" name="celular" required>
+                    </div>
+                    <div class="mb-2">
+                        <label class="form-label" for="edit_fechaNacimiento">Fecha de Nacimiento:</label>
+                        <input class="form-control" type="date" id="edit_fechaNacimiento" name="fechaNacimiento" required>
+                    </div>
+                    <div class="mb-2">
+                        <label class="form-label" for="edit_edad"> Edad:</label>
+                        <input class="form-control" type="number" id="edit_edad" name="edad" readonly>
+                    </div>
+                    <div class="mb-2">
+                        <label class="form-label" for="edit_estadoCivil">Estado Civil:</label>
+                        <select class="form-control" id="edit_estadoCivil" name="estadoCivil" required>
+                            <option value="soltero">Soltero</option>
+                            <option value="casado">Casado</option>
+                            <option value="divorciado">Divorciado</option>
+                            <option value="union_libre">Unión Libre</option>
+                            <option value="viudo">Viudo</option>
+                        </select>
+                    </div>
+                    <div class="mb-2">
+                        <label class="form-label" for="edit_tipoSangre">Tipo de Sangre:</label>
+                        <input class="form-control" type="text" id="edit_tipoSangre" name="tipoSangre" required>
+                    </div>
+                    <div class="mb-2">
+                        <label class="form-label" for="edit_correo">Correo Electrónico:</label>
+                        <input class="form-control" type="email" id="edit_correo" name="correo" required>
+                    </div>
+                    <div class="mb-2">
+                        <label class="form-label" for="edit_fechaCita">Fecha de citas:</label>
+                        <input class="form-control" type="date" id="edit_fechaCita" name="fechaCita" required>
+                    </div>
+                    <div class="mb-2">
+                        <label class="form-label" for="edit_horaCita">Hora de cita:</label>
+                        <input class="form-control" type="time" name="horaCita" id="edit_horaCita" required>
+                    </div>
+                    <div class="mb-2">
+                        <label class="form-label" for="edit_tratamiento">Tipo de tratamiento:</label>
+                        <input class="form-control" type="text" name="tratamiento" id="edit_tratamiento" required>
+                    </div>
+                    <div class="mb-2">
+                        <label for="edit_estado" class="form-label">Estado</label>
+                        <select class="form-control" id="edit_estado" name="estado" required>
+                            <option value="activo">Activo</option>
+                            <option value="inactivo">Inactivo</option>
+                            <option value="completado">Completado</option>
+                            <option value="cancelado">Cancelado</option>
+                        </select>
+                    </div>
+                    <p></p>
+                    <button type="submit" class="btn btn-warning">Guardar Cambios</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modalEliminar" tabindex="-1" aria-labelledby="eliminarLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title" id="eliminarLabel">Confirmar Eliminación</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            <div class="modal-body">
+                <p>¿Está seguro de que desea eliminar esta cita?</p>
+                <form id="formEliminarCita" method="post" action="">
+                    {% csrf_token %}
+                    <input type="hidden" id="delete_cita_id" name="cita_id">
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-danger">Eliminar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="layoutSidenav_content">
+    <main>
+        <div class="container-fluid px-4 " style="padding: 5px;">
+            <h1 class="mt-4">Agendar</h1>
+            <ol class="breadcrumb mb-4">
+                <li class="breadcrumb-item active">Citas agendadas</li>
+            </ol>
+        </div>
+        <div class="card mb-4">
+            <div class="card-header" style="text-align: center;">
+                <i class="fas fa-table me-1"></i>
+                CITAS AGENDADAS
+            </div>
+            <p></p>
+            <div class="d-flex justify-content-end p-3">
+                <button type="submit" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modalAgregarCita">
+                    <i class="bi bi-plus-circle-fill">➕</i> Agregar cita
+                </button>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-bordered" id="datatablesSimple">
+                    <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Nombre</th>
+                            <th scope="col">Apellido</th>
+                            <th scope="col">Cédula</th>
+                            <th scope="col">Dirección</th>
+                            <th scope="col">Celular</th>
+                            <th scope="col">Fecha de nacimiento</th>
+                            <th scope="col">Edad</th>
+                            <th scope="col">Estado Civil</th>
+                            <th scope="col">Tipo de sangre</th>
+                            <th scope="col">Correo electrónico</th>
+                            <th scope="col">Fecha de cita</th>
+                            <th scope="col">Hora de cita</th>
+                            <th scope="col">Tipo de tratamiento</th>
+                            <th scope="col">Estado</th>
+                            <th scope="col">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for cita in citas %}
+                        <tr>
+                            <th scope="row">{{ forloop.counter }}</th>
+                            <td>{{ cita.nombre }}</td>
+                            <td>{{ cita.apellido }}</td>
+                            <td>{{ cita.cedula }}</td>
+                            <td>{{ cita.direccion }}</td>
+                            <td>{{ cita.celular }}</td>
+                            <td>{{ cita.fecha_nacimiento|date:"d/m/Y" }}</td>
+                            <td>{{ cita.edad }}</td> {# ¡Ahora solo accedemos a la clave 'edad'! #}
+                            <td>{{ cita.estado_civil_display }}</td> {# ¡Ahora solo accedemos a la clave 'estado_civil_display'! #}
+                            <td>{{ cita.tipo_sangre }}</td>
+                            <td>{{ cita.correo }}</td>
+                            <td>{{ cita.fecha_cita|date:"d/m/Y" }}</td>
+                            <td>{{ cita.hora_cita|time:"H:i" }}</td>
+                            <td>{{ cita.tipo_tratamiento }}</td>
+                            <td>
+                                {% if cita.estado == 'activo' %}
+                                    Activo
+                                {% elif cita.estado == 'inactivo' %}
+                                    Inactivo
+                                {% elif cita.estado == 'completado' %}
+                                    Completado
+                                {% elif cita.estado == 'cancelado' %}
+                                    Cancelado
+                                {% endif %}
+                            </td>
+                            <td>
+                                <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                                    <button class="btn btn-sm btn-warning edit-btn" data-bs-toggle="modal"
+                                        data-bs-target="#modalEditar" data-cita-id="{{ cita.pk }}" title="Editar">
+                                        <i class="bi bi-pencil-fill">✏️</i>
+                                    </button>
+                                    <button class="btn btn-sm btn-danger delete-btn" data-bs-toggle="modal"
+                                        data-bs-target="#modalEliminar" data-cita-id="{{ cita.pk }}" title="Eliminar">
+                                        <i class="bi bi-trash-fill">🗑️</i>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                    
+                        
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+</div>
+
+
+{% endblock %}
