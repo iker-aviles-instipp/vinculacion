@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% block contenido %}
+<div id="layoutSidenav_content">
+ <main>
+        <div class="container-fluid px-4">
+            <h1 class="mt-4">Editar Cita</h1>
+            <ol class="breadcrumb mb-4"><div id="content-wrapper" class="d-flex flex-column">
+
+    <form action="{% url 'editar_cita' c.id %}" method="POST">
+        
+        <div class="card mb-4">
+        <div class="card-header">
+        <i class="fas fa-calendar-plus me-1"></i> Editar
+
+        {% csrf_token %}
+        <div class="mb-3">
+            <label for="fecha_cita" class="form-label">Fecha de cita</label>
+            <input type="date" class="form-control" id="fecha_cita" name="fecha_cita" value="{{ c.fecha_cita|date:'Y-m-d' }}">
+        </div>
+        <div class="mb-3">
+            <label for="hora_cita" class="form-label">Hora de cita</label>
+            <input type="time" class="form-control" id="hora_cita" name="hora_cita" value="{{ c.hora_cita|time:'H:i' }}">
+        </div>
+        <div class="mb-3">
+            <label for="tipo_tratamiento" class="form-label">Tipo de tratamiento</label>
+            <input type="text" class="form-control" id="tipo_tratamiento" name="tipo_tratamiento" value="{{ c.tipo_tratamiento }}">
+        </div>
+        <button type="submit" class="btn btn-primary">Guardar cambios</button>
+        <a href="{% url 'agendarCi' %}" class="btn btn-secondary">Cancelar</a>
+    </form>
+ </main>
+</div>
+{% endblock %}

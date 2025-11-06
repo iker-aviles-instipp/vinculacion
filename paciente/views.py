@@ -6,6 +6,9 @@ from django.contrib import messages
 from .models import Pacientes, Profile
 from .models import Insumo
 
+from django.shortcuts import render, redirect
+from .models import Pacientes, cita
+
 # Create your views here.
 def login_view(request):
     if request.method == 'GET':
@@ -36,63 +39,73 @@ def base(request):
 def agendarCi(request):
     return render(request, 'agendarCi.html')
 
+from django.shortcuts import render, redirect, get_object_or_404
+from .models import Pacientes, cita
+from django.contrib import messages
+
+def agendarCi(request):
+    citas = cita.objects.select_related('paciente').all()
+    return render(request, 'agendarCi.html', {'citas': citas})
+
+
 def agendarCi_guardar(request):
     if request.method == 'POST':
-        nombres = request.POST.get('nombres')
-        apellido = request.POST.get('apellido')
         cedula = request.POST.get('cedula')
-        direccion = request.POST.get('direccion')
-        celular = request.POST.get('celular')
-        fecha_nacimiento = request.POST.get('fecha_nacimiento')
-        estado_civil = request.POST.get('estado_civil')
-        edad = request.POST.get('edad')
-        correo = request.POST.get('correo')
-        tipo_sangre = request.POST.get('tipo_sangre')
-        fecha_cita = request.POST.get('fecha_cita')
-        hora_cita = request.POST.get('hora_cita')
-        tipo_tratamiento = request.POST.get('tipo_tratamiento')
+        nombre = request.POST.get('nombre')
+        apellido = request.POST.get('apellido')
+        fecha = request.POST.get('fecha')
+        hora = request.POST.get('hora')
+        motivo = request.POST.get('motivo')
 
-        cita = Pacientes(
-            nombres=nombres,
-            apellido=apellido,
+        paciente, creado = Pacientes.objects.get_or_create(
             cedula=cedula,
-            direccion=direccion,
-            celular=celular,
-            fecha_nacimiento=fecha_nacimiento,
-            estado_civil=estado_civil,
-            edad=edad,
-            correo=request.POST.get('correo'),
-            tipo_sangre=tipo_sangre,
-            fecha_cita=fecha_cita,
-            hora_cita=hora_cita,
-            tipo_tratamiento=tipo_tratamiento
+            defaults={
+                'nombre': nombre,
+                'apellido': apellido,
+                'direccion': '',
+                'celular': '',
+                'fecha_nacimiento': '2000-01-01',
+                'estado_civil': 'soltero',
+                'edad': 0,
+                'correo': '',
+                'tipo_sangre': '',
+                'fecha_cita': fecha,
+                'hora_cita': hora,
+                'tipo_tratamiento': motivo,
+            }
         )
-        cita.save()
-        messages.success(request, 'Cita agendada correctamente.')
-        return redirect('base')
 
-    return render(request, 'agendarCi.html')
+        cita.objects.create(
+            paciente=paciente,
+            fecha_cita=fecha,
+            hora_cita=hora,
+            tipo_tratamiento=motivo
+        )
 
-def agendarCi_editar(request, pk):
-    cita = get_object_or_404(Pacientes, pk=pk)
+        messages.success(request, "✅ Cita agendada correctamente.")
+        return redirect('agendarCi')
+
+    return redirect('agendarCi')
+
+
+def editar_cita(request, id):
+    c = get_object_or_404(cita, id=id)
+
     if request.method == 'POST':
-        cita.nombre = request.POST.get('nombres')
-        cita.apellido = request.POST.get('apellido')
-        cita.cedula = request.POST.get('cedula')
-        cita.direccion = request.POST.get('direccion')
-        cita.celular = request.POST.get('celular')
-        cita.fecha_nacimiento = request.POST.get('fecha_nacimiento')
-        cita.estado_civil = request.POST.get('estado_civil')
-        cita.edad = request.POST.get('edad')
-        cita.correo = request.POST.get('correo')
-        cita.tipo_sangre = request.POST.get('tipo_sangre')
-        cita.fecha_cita = request.POST.get('fecha_cita')
-        cita.hora_cita = request.POST.get('hora_cita')
-        cita.tipo_tratamiento = request.POST.get('tipo_tratamiento')
-        cita.save()
-        messages.success(request, 'Cita actualizada correctamente.')
-        return redirect('base')
-    return render(request, 'agendarCi_editar.html', {'cita': cita})
+        c.fecha_cita = request.POST['fecha_cita']
+        c.hora_cita = request.POST['hora_cita']
+        c.tipo_tratamiento = request.POST['tipo_tratamiento']
+        c.save()
+        return redirect('agendarCi')
+
+    return render(request, 'editar_cita.html', {'c': c})
+
+
+def eliminar_cita(request, id):
+    c = get_object_or_404(cita, id=id)
+    c.delete()
+    messages.success(request, "🗑️ Cita eliminada correctamente.")
+    return redirect('agendarCi')
 
 
 @login_required

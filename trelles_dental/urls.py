@@ -2,6 +2,8 @@ from django.contrib import admin
 from django.urls import path, include
 from paciente import views
 
+from django.urls import path
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.base, name='base'),
@@ -14,8 +16,13 @@ urlpatterns = [
     path('logout/', views.logout_view, name='logout'),
 
     #CITAS
+    #path('agendarCi/guardar/', views.agendarCi_guardar, name='agendarCi_guardar'),
+
+    path('agendarCi/', views.agendarCi, name='agendarCi'),
     path('agendarCi/guardar/', views.agendarCi_guardar, name='agendarCi_guardar'),
-    
+    path('agendarCi/editar/<int:id>/', views.editar_cita, name='editar_cita'),
+    path('agendarCi/eliminar/<int:id>/', views.eliminar_cita, name='eliminar_cita'),
+
 
     # INSUMOS
     path('crear_insumo/', views.crear_insumo, name='crear_insumo'),
