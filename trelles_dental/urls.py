@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.urls import path, include
 from paciente import views
-
+from django.contrib.auth import views as auth_views
 from django.urls import path
 
 urlpatterns = [
@@ -28,5 +28,21 @@ urlpatterns = [
     path('crear_insumo/', views.crear_insumo, name='crear_insumo'),
     path('registroInsu/editar/<int:pk>/', views.editar_insumo, name='editar_insumo'),
     path('registroInsu/eliminar/<int:pk>/', views.eliminar_insumo, name='eliminar_insumo'),
+    # Rutas para el reseteo de contraseña
+    path('reset_password/', 
+         auth_views.PasswordResetView.as_view(template_name="password_reset_form.html"), 
+         name="reset_password"),
+
+    path('reset_password_sent/', 
+         auth_views.PasswordResetDoneView.as_view(template_name="password_reset_done.html"), 
+         name="password_reset_done"),
+
+    path('reset/<uidb64>/<token>/', 
+         auth_views.PasswordResetConfirmView.as_view(template_name="password_reset_confirm.html"), 
+         name="password_reset_confirm"),
+
+    path('reset_password_complete/', 
+         auth_views.PasswordResetCompleteView.as_view(template_name="password_reset_complete.html"), 
+         name="password_reset_complete"),
   
 ]
