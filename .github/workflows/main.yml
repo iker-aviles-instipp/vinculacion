@@ -1,0 +1,59 @@
+name: CI (PR) - Unit, Integrations, Performance and Stress
+
+on:
+  pull_request:
+    branches: [developer]
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    # Aumentar el tiempo de espera, ya que las pruebas de estrés (burst) pueden ser largas.
+    timeout-minutes: 5
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.10"
+          cache: "pip"
+          cache-dependency-path: requirements.txt
+
+      - name: Install dependencies (incluyendo pytest-html)
+        run: |
+          # Asegúrate de que pytest-html esté en requirements.txt
+          pip install -r requirements.txt;
+          pip install pytest-django pytest-html # Instalar plugins de testing
+
+      - name: Django check
+        run: |
+          python -V
+          python -c "import django, sys; print(django.get_version())"
+          python manage.py check
+      
+      - name: Run unit, integration, performance and stress tests
+        # Usamos variables de entorno para establecer el SLA y la carga
+        env:
+          # --- CORRECCIÓN CRÍTICA: Módulo de configuración correcto ---
+          # Según tu estructura, es trelles_dental.settings
+          DJANGO_SETTINGS_MODULE: trelles_dental.settings
+          # Establecer un SLA y carga más tolerantes para entornos de CI
+          SLA_MS: 3000          # 3 segundos para el test de latencia simple
+          BURST_USERS: 10       # Menos usuarios para CI (ajustar según la necesidad)
+          BURST_REQUESTS: 50    # Menos requests
+        run: |
+          # El comando 'pytest' ejecuta todas las pruebas excepto las marcadas como 'e2e'.
+          # Genera un reporte HTML con los resultados.
+          pytest -m "not e2e" \
+                 --html=reporte_perf.html \
+                 --self-contained-html
+          
+      - name: Upload Test Report (HTML)
+        uses: actions/upload-artifact@v4
+        with:
+          name: Test-Report
+          path: reporte_perf.html
+          # Utiliza 'if: always()' para subir el reporte incluso si los tests fallan
+          if: always()
