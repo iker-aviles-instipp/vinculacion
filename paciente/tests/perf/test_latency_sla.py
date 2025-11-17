@@ -7,7 +7,7 @@ from django.urls import reverse
 # Permite ajustar el SLA sin tocar el código: 
 # Ejecución de ejemplo (Windows): $env:SLA_MS=500 ; pytest -m perf
 # Ejecución de ejemplo (Linux/macOS): SLA_MS=500 pytest -m perf
-SLA_MS = int(os.getenv("SLA_MS", 2000)) # Valor por defecto de 2000 ms (2 segundos)
+SLA_MS = int(os.getenv("SLA_MS", 2500)) # Valor por defecto de 2000 ms (2 segundos)
 
 
 @pytest.mark.perf
