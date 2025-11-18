@@ -50,7 +50,7 @@ jobs:
         run: |
           # El comando 'pytest' ejecuta todas las pruebas excepto las marcadas como 'e2e'.
           # Genera un reporte HTML con los resultados.
-          pytest -m "not e2e" \
+          pytest -m "not e2e" 
                  --html=reporte_perf.html \
                  --self-contained-html
           
