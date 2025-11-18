@@ -48,9 +48,10 @@ jobs:
           BURST_USERS: 10       # Menos usuarios para CI (ajustar según la necesidad)
           BURST_REQUESTS: 50    # Menos requests
         run: |
+          # ¡CORRECCIÓN APLICADA AQUÍ!
           # El comando 'pytest' ejecuta todas las pruebas excepto las marcadas como 'e2e'.
           # Genera un reporte HTML con los resultados.
-          pytest -m "not e2e" 
+          pytest -m "not e2e" \
                  --html=reporte_perf.html \
                  --self-contained-html
           
@@ -59,5 +60,4 @@ jobs:
         with:
           name: Test-Report
           path: reporte_perf.html
-          # Utiliza 'if: always()' para subir el reporte incluso si los tests fallan
           if: always()
