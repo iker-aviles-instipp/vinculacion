@@ -2,7 +2,11 @@ name: CI (PR) - Unit, Integrations, Performance and Stress
 
 on:
   pull_request:
-    branches: [developer]
+    # 1. CORRECCIÓN: Usamos la rama principal de trabajo en lugar de 'developer'
+    branches: [implementacion_de_pruebas_de_fabian_hernandez, master]
+  push:
+    # 2. ADICIÓN: Ejecutar en cada 'push' a la rama de trabajo principal y master
+    branches: [implementacion_de_pruebas_de_fabian_hernandez, master]
 
 jobs:
   tests:
