@@ -1,3 +1,4 @@
+import pytest
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from selenium import webdriver
 from selenium.webdriver.common.by import By
@@ -6,7 +7,7 @@ from django.urls import reverse # Necesario para usar reverse en E2E tests
 from selenium.webdriver.support.ui import WebDriverWait # Importación necesaria
 from selenium.webdriver.support import expected_conditions as EC # Importación necesaria
 from datetime import date, time # Aunque no las uses ahora, suelen ser necesarias en E2E
-
+@pytest.mark.e2e
 class CitaE2ETest(StaticLiveServerTestCase):
     def setUp(self):
         self.browser = webdriver.Chrome() 
