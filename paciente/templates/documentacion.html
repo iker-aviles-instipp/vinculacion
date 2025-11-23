@@ -5,85 +5,113 @@
 {% block contenido %}
 
 <div class="modal fade" id="modalEliminar" tabindex="-1" aria-labelledby="eliminarLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header bg-danger text-white">
-        <h5 class="modal-title" id="eliminarLabel">Confirmar Eliminación</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-        <button type="button" class="btn btn-danger">Eliminar</button>
-      </div>
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title" id="eliminarLabel">Confirmar Eliminación de Documento</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            <div class="modal-body">
+                ¿Estás seguro de que deseas eliminar el último documento de este paciente?
+            </div>
+            <div class="modal-footer">
+                <form method="POST" id="form-eliminar-documento">
+                    {% csrf_token %}
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-danger">Eliminar</button>
+                </form>
+            </div>
+        </div>
     </div>
-  </div>
 </div>
 
-            <div id="layoutSidenav_content">
-                <main>
-                    <div class="container-fluid px-4 " style="padding: 5px;">
-                        <h1 class="mt-4">Documentos</h1>
-                        <ol class="breadcrumb mb-4">
-                            <li class="breadcrumb-item active">Documentacion de pacientes</li>
-                        </ol>
-                        </div>
-                        <div class="card mb-4">
-                            <div class="card-header" style="text-align: center;">
-                                <i class="fas fa-table me-1"></i>
-                                HISTORIAL DE DOCUMENTACION
-                            </div>
-                            <p></p>
-                             <div class="table-responsive">
-                            <table class="table table-bordered" id="datatablesSimple">
-    <thead>
-    <tr>
-      <th scope="col">#</th>
-      <th scope="col">Nombre</th>
-      <th scope="col">Apellido</th>
-      <th scope="col">Cedula</th>
-      <th scope="col">Ultima actualizacion</th>
-      <th scope="col">Visualizar Documento</th>
-      <th scope="col">Acciones</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th scope="row">1</th>
-      <td>Neymar Jr</td>
-      <td>Santos</td>
-      <td>0718561456</td>
-      <td>12/07/2025</td>
-      <td><button class="btn btn-primary">Ver</button></td>
-      <td div class="d-grid gap-2 d-md-flex justify-content-md-end">
-      <button class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#modalEliminar" title="Eliminar"><i class="bi bi-trash-fill">🗑️</i></button>    
-      </div></td>
-    </tr>
-    <tr>
-      <th scope="row">2</th>
-      <td>Lamine</td>
-      <td>Yamal</td>
-      <td>0718561456</td>
-      <td>10/07/2025</td>
-      <td><button class="btn btn-primary">Ver</button></td>
-      <td div class="d-grid gap-2 d-md-flex justify-content-md-end">
-      <button class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#modalEliminar" title="Eliminar"><i class="bi bi-trash-fill">🗑️</i></button>
-      </div></td>
-    </tr>
-    <tr>
-      <th scope="row">3</th>
-      <td>Leo</td>
-      <td>Messi</td>
-      <td>0718561456</td>
-      <td>09/07/2025</td>
-      <td><button class="btn btn-primary">Ver</button></td>
-      <td div class="d-grid gap-2 d-md-flex justify-content-md-end">
-      <button class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#modalEliminar" title="Eliminar"><i class="bi bi-trash-fill">🗑️</i></button>
-      </div></td>
-    </tr>
-  </tbody>
-</table>
-</div>
+<div id="layoutSidenav_content">
+    <main>
+        <div class="container-fluid px-4 " style="padding: 5px;">
+            <h1 class="mt-4">Documentos</h1>
+            <ol class="breadcrumb mb-4">
+                <li class="breadcrumb-item active">Documentación de pacientes</li>
+            </ol>
+        </div>
+
+        <div class="card mb-4">
+            <div class="card-header" style="text-align: center;">
+                <i class="fas fa-table me-1"></i>
+                HISTORIAL DE DOCUMENTACIÓN
+            </div>
+            <p></p>
+            <div class="table-responsive">
+                <table class="table table-bordered" id="datatablesSimple">
+                    <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Nombre</th>
+                            <th scope="col">Apellido</th>
+                            <th scope="col">Cedula</th>
+                            <th scope="col">Última actualización</th>
+                            <th scope="col">Visualizar Documento</th>
+                            <th scope="col">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for paciente in pacientes %}
+                        {% with ultimo_documento=paciente.documento_set.last %}
+                        <tr>
+                            <th scope="row">{{ forloop.counter }}</th>
+                            <td>{{ paciente.nombre }}</td>
+                            <td>{{ paciente.apellido }}</td>
+                            <td>{{ paciente.cedula }}</td>
+                            <td>
+                                {{ ultimo_documento.fecha_creacion|default:"N/A" }}
+                            </td>
+                            <td>
+                                <a href="{% url 'ver_documento' paciente.id %}" class="btn btn-primary">Ver/Editar</a>
+                            </td>
+                            <td class="d-grid gap-2 d-md-flex justify-content-md-end">
+                                {% if ultimo_documento %}
+                                    <button class="btn btn-sm btn-danger eliminar-btn" 
+                                            data-bs-toggle="modal" 
+                                            data-bs-target="#modalEliminar" 
+                                            data-documento-id="{{ ultimo_documento.id }}" 
+                                            title="Eliminar Documento">
+                                            <i class="bi bi-trash-fill">🗑️</i>
+                                    </button>
+                                {% else %}
+                                    <button class="btn btn-sm btn-secondary" disabled title="No hay documento para eliminar">
+                                        <i class="bi bi-trash-fill">🗑️</i>
+                                    </button>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endwith %}
+                        {% empty %}
+                        <tr>
+                            <td colspan="7">No hay pacientes registrados.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
 </div>
 
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var modalEliminar = document.getElementById('modalEliminar');
+        
+        modalEliminar.addEventListener('show.bs.modal', function (event) {
+            var button = event.relatedTarget;
+            var documentoId = button.getAttribute('data-documento-id');
+            var form = document.getElementById('form-eliminar-documento');
+
+            // Crear la URL de eliminación
+            var urlBase = '{% url "eliminar_documento" 0 %}';
+            var urlEliminar = urlBase.replace('0', documentoId);
+            
+            form.action = urlEliminar;
+        });
+    });
+</script>
 
 {% endblock %}

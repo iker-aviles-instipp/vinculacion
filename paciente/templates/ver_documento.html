@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block contenido %}
+<link href="{% static 'estilos/css/custom.css' %}" rel="stylesheet" />
+<div class="container-fluid px-4 mt-4 contenido-ajustado">
+    <div class="row">
+        <div class="col-lg-10 offset-lg-1">
+            <h1 class="mt-4">Ver/Editar Documento de Observaciones</h1>
+            <ol class="breadcrumb mb-4">
+                <li class="breadcrumb-item"><a href="{% url 'documentacion' %}">Documentos</a></li>
+                <li class="breadcrumb-item active">Observaciones de {{ paciente.nombre }} {{ paciente.apellido }}</li>
+            </ol>
+
+            <div class="card shadow mb-4">
+                <div class="card-header bg-primary text-white">
+                    <i class="fas fa-file-alt me-1"></i>
+                    Observaciones (Última Actualización: {{ documento.fecha_creacion|default:"No registrado" }})
+                </div>
+                <div class="card-body">
+                    
+                    <form method="POST">
+                        {% csrf_token %}
+
+                        <div class="mb-3">
+                            <label for="observaciones" class="form-label">Notas del Historial y Observaciones:</label>
+                            <textarea class="form-control" 
+                                      id="observaciones" 
+                                      name="observaciones" 
+                                      rows="15" 
+                                      placeholder="Escribe aquí las observaciones, historial o notas importantes...">{{ documento.observaciones|default:"" }}</textarea>
+                        </div>
+                        
+                        <a href="{% url 'documentacion' %}" class="btn btn-secondary">
+                            <i class="fas fa-arrow-left"></i> Volver a la Lista
+                        </a>
+                        
+                        <button type="submit" class="btn btn-success float-end">
+                            <i class="fas fa-save"></i> Guardar/Actualizar Observaciones
+                        </button>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

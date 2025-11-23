@@ -10,7 +10,9 @@ urlpatterns = [
     # SISTEMA
     path('agendarCi/', views.agendarCi, name='agendarCi'),
     path('ubicacion/', views.ubicacion, name='ubicacion'),
-    path('documentacion/', views.documentacion, name='documentacion'),
+    path("documentacion/", views.documentacion, name="documentacion"),
+path("documentacion/ver/<int:paciente_id>/", views.ver_documento, name="ver_documento"), # Usamos paciente_id
+path("documentacion/eliminar/<int:documento_id>/", views.eliminar_documento, name="eliminar_documento"), # Usamos documento_id
     path('registroInsu/', views.registroInsu, name='registroInsu'),
     path('login/', views.login_view, name='login'),
     path('logout/', views.logout_view, name='logout'),

@@ -1,0 +1,45 @@
+/* AJUSTE PARA EL CONTENIDO PRINCIPAL */
+/* Este selector apunta al div que contiene todo tu contenido (títulos, tablas, etc.) */
+#layoutSidenav_content {
+    /* Mantiene el contenido por debajo de la barra superior (Navbar). */
+    padding-top: 56px !important; 
+    
+    /* FUERZA el espacio a la izquierda para el menú desplegado. 
+       225px es el ancho más común para estos sidebars. */
+    padding-left: 225px !important; 
+    
+    /* Asegura que el contenido tenga una capa mayor a la del sidebar (z-index) */
+    position: relative;
+    z-index: 5;
+    
+    /* Agrega una transición para un efecto visual suave al abrir/cerrar */
+    transition: padding 0.15s ease-in-out; 
+}
+
+/* AJUSTE PARA EL SIDEBAR DESPLEGADO */
+/* Esta clase sb-sidenav-toggled se añade al <body> cuando el menú se colapsa.
+   Si tu menú SIEMPRE está abierto (como se ve en la imagen), esta regla es menos importante, 
+   pero la incluimos por si acaso. */
+/* body.sb-sidenav-toggled #layoutSidenav_content {
+    padding-left: 0 !important;
+} */
+
+/* CORRECCIÓN FINAL PARA EL TÍTULO */
+/* Ya que el Navbar superior es fijo, el contenido necesita más margen superior */
+/* Aumentamos el margen superior en la página de edición para compensar */
+.container-fluid.px-4.mt-4 {
+    margin-top: 1.5rem !important;
+    padding-top: 1rem !important; /* Espacio interno para el título */
+}
+
+/* ASEGURAR CAPA DE LA BARRA SUPERIOR */
+/* Garantiza que la barra superior siempre esté sobre todo lo demás */
+.sb-topnav {
+    z-index: 1050 !important; 
+}
+
+/* Estilo para el área de Observaciones */
+#observaciones {
+    min-height: 400px;
+    resize: vertical;
+}
