@@ -5,6 +5,7 @@ from django.contrib.auth import login, logout, authenticate
 from django.contrib import messages
 from .models import Pacientes, Profile
 from .models import Insumo
+from .models import Documento
 
 from django.shortcuts import render, redirect
 from .models import Pacientes, cita
@@ -114,7 +115,66 @@ def ubicacion(request):
 
 @login_required
 def documentacion(request):
-    return render(request, 'documentacion.html')
+    # Esto obtiene a todos los pacientes. Si quieres listar solo a los que tienen documentos,
+    # puedes ajustar la consulta o usar el modelo Documento.
+    pacientes = Pacientes.objects.all() 
+    
+    # Para obtener la fecha de la última actualización (si se refiere a la última cita)
+    # Es complejo con un solo queryset, pero asumiremos que el HTML lo maneja por ahora.
+
+    return render(request, 'documentacion.html', {'pacientes': pacientes})
+
+
+# Vista para ver un documento
+@login_required
+def ver_documento(request, paciente_id):
+    # 1. Obtener el paciente
+    paciente = get_object_or_404(Pacientes, id=paciente_id)
+    
+    # 2. Obtener el último documento (o crear uno si no existe)
+    # Buscamos el documento más reciente del paciente
+    documento = Documento.objects.filter(paciente=paciente).order_by('-fecha_creacion').first()
+
+    if request.method == 'POST':
+        # 3. Lógica para GUARDAR/EDITAR
+        observaciones_data = request.POST.get('observaciones')
+        
+        if documento:
+            # Si el documento existe, lo editamos
+            documento.observaciones = observaciones_data
+            documento.save()
+            messages.success(request, f"Observaciones del paciente {paciente.nombre} actualizadas correctamente.")
+        else:
+            # Si el documento NO existe, creamos uno nuevo (es el nuevo flujo de "Agregar")
+            documento = Documento.objects.create(
+                paciente=paciente,
+                nombre_documento='Documento de Observación',
+                observaciones=observaciones_data
+            )
+            messages.success(request, f"Nuevo documento de observación creado para {paciente.nombre}.")
+            
+        return redirect('documentacion') # Volver a la lista principal
+
+    # 4. Mostrar la página Ver/Editar
+    return render(request, 'ver_documento.html', {
+        'paciente': paciente,
+        'documento': documento # Puede ser None si es la primera vez que entra
+    })
+
+
+# Vista para eliminar un documento
+@login_required
+def eliminar_documento(request, documento_id):
+    documento = get_object_or_404(Documento, id=documento_id)
+    
+    if request.method == 'POST':
+        documento.delete()
+        messages.success(request, "Documento eliminado correctamente.")
+        return redirect('documentacion')
+
+    # Si se accede por GET (por ejemplo, desde el modal de confirmación),
+    # podrías devolver un template de confirmación si no usas AJAX/Modal
+    return render(request, 'confirmar_eliminacion_documento.html', {'documento': documento})
 
 @login_required
 def registroInsu(request):

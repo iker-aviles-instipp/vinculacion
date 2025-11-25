@@ -26,7 +26,7 @@ class Pacientes(models.Model):
     hora_cita = models.TimeField(max_length=1000)
     tipo_tratamiento =models.EmailField(null=True)
     def __str__(self):
-        return f"{self.nombres} {self.apellidos}"
+        return f"{self.nombre} {self.apellido}"
     
 class cita(models.Model):
     paciente = models.ForeignKey(Pacientes, on_delete=models.CASCADE)
@@ -46,3 +46,13 @@ class Insumo(models.Model):
 
     def __str__(self):
         return self.nombre
+     
+class Documento(models.Model):
+    paciente = models.ForeignKey(Pacientes, on_delete=models.CASCADE)
+    nombre_documento = models.CharField(max_length=255, default='Documento de Observación') 
+    fecha_creacion = models.DateField(auto_now_add=True)
+    # 🚨 NUEVO CAMPO: Campo de texto para las observaciones
+    observaciones = models.TextField(blank=True, null=True) 
+    
+    def __str__(self):
+        return f'Documento de {self.paciente.nombre} {self.paciente.apellido} - {self.nombre_documento}'
