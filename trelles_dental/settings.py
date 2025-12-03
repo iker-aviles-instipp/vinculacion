@@ -19,15 +19,10 @@ SECRET_KEY = os.getenv('SECRET_KEY', 'django-insecure-^*a!lecnh3^oqz)9ddfd((35x3
 # DEBUG = True
 DEBUG = os.environ.get('DEBUG_VALUE', 'False') == 'True'
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "127.0.0.1,localhost").split(",")
 
 # ALLOWED_HOSTS = []
-RENDER_EXTERNAL_HOSTNAME = os.environ.get('RENDER_EXTERNAL_HOSTNAME')
 
-if DEBUG:
-    ALLOWED_HOSTS = ['*']  # Modo desarrollo
-elif RENDER_EXTERNAL_HOSTNAME:
-    ALLOWED_HOSTS.append(RENDER_EXTERNAL_HOSTNAME) # Modo producción (Render)
 
 
 # Application definition
@@ -41,11 +36,12 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django_coverage_plugin',
     'paciente',
+    'api_rest',
+    'rest_framework',
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -77,25 +73,12 @@ WSGI_APPLICATION = 'trelles_dental.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
-DATABASE_URL = os.environ.get('DATABASE_URL')
-
-if DATABASE_URL:
-    # 1. Configuración de PostgreSQL para Render/Producción
-    DATABASES = {
-        'default': dj_database_url.config(
-            default=DATABASE_URL,
-            conn_max_age=600,
-            conn_health_checks=True,
-        )
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
-else:
-    # 2. Configuración de SQLite para Desarrollo Local
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': BASE_DIR / 'db.sqlite3',
-        }
-    }
+}
 #DATABASES = {
     #'default': {
         #'ENGINE': 'django.db.backends.postgresql',
@@ -174,3 +157,22 @@ EMAIL_USE_SSL = False   # Desactivar SSL (Ya lo tenías bien)
 EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER")
 EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
 DEFAULT_FROM_EMAIL = os.getenv("DEFAULT_FROM_EMAIL", EMAIL_HOST_USER)
+
+
+# =========================================================
+# CONFIGURACIÓN PARA DJANGO REST FRAMEWORK
+# =========================================================
+REST_FRAMEWORK = {
+    # Use Django's standard `django.contrib.auth` permissions,
+    # or allow read-only access for unauthenticated users.
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
+    ]
+}
+# =========================================================
+
+# PAGINACIÓN POR DEFECTO PARA DRF
+REST_FRAMEWORK = {
+    "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
+    "PAGE_SIZE": 10,
+}

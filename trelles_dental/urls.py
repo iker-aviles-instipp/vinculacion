@@ -3,6 +3,7 @@ from django.urls import path, include
 from paciente import views
 from django.contrib.auth import views as auth_views
 from django.urls import path
+from rest_framework.routers import DefaultRouter
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -46,5 +47,8 @@ path("documentacion/eliminar/<int:documento_id>/", views.eliminar_documento, nam
     path('reset_password_complete/', 
          auth_views.PasswordResetCompleteView.as_view(template_name="password_reset_complete.html"), 
          name="password_reset_complete"),
+
+    path('api/', include('api_rest.urls')),
+    path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
   
 ]
