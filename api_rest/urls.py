@@ -1,6 +1,6 @@
 from django.urls import path, include
 from rest_framework import routers
-from api_rest import api_views 
+from . import views as api_views
 
 # Crea un router y registra las ViewSets
 router = routers.DefaultRouter()

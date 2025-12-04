@@ -1,5 +1,5 @@
 from django.contrib.auth.models import Group, User
-from autenticacion.models import Profile
+from paciente.models import Profile
 from paciente.models import Pacientes, cita, Insumo, Documento 
 from .serializers import (
     UserSerializer, GroupSerializer, ProfileSerializer, 
