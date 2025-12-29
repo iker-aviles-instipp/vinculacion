@@ -56,3 +56,13 @@ class Documento(models.Model):
     
     def __str__(self):
         return f'Documento de {self.paciente.nombre} {self.paciente.apellido} - {self.nombre_documento}'
+    
+class Insumo(models.Model):
+    nombre = models.CharField(max_length=100)
+    cantidad = models.IntegerField()
+    fecha_ingreso = models.DateField()
+    ultima_actualizacion = models.DateField(auto_now=True) # Este es el campo que falta en la DB
+    observacion = models.TextField(blank=True, null=True)
+
+    def __str__(self):
+        return self.nombre

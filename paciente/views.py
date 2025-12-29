@@ -176,47 +176,39 @@ def eliminar_documento(request, documento_id):
     # podrías devolver un template de confirmación si no usas AJAX/Modal
     return render(request, 'confirmar_eliminacion_documento.html', {'documento': documento})
 
-@login_required
 def registroInsu(request):
-    # Mostrar la tabla con insumos
-    insumos = Insumo.objects.all()
-    return render(request, 'registroInsu.html', {'insumos': insumos})
+    insumos_listado = Insumo.objects.all()
+    # Usamos 'Insumos' con I mayúscula porque así lo tienes en el HTML {% for insumo in Insumos %}
+    return render(request, 'registroinsu.html', {'Insumos': insumos_listado})
 
+# 2. Agregar Insumo
 def crear_insumo(request):
     if request.method == 'POST':
-        print("ENTRÓ A LA VISTA CREAR")
-
         nombre = request.POST.get('nombre')
         cantidad = request.POST.get('cantidad')
-        fecha_ingreso = request.POST.get('fecha_ingreso')
-        observacion = request.POST.get('observacion')
+        fecha = request.POST.get('fecha_ingreso')
+        obs = request.POST.get('observacion')
+        
+        Insumo.objects.create(nombre=nombre, cantidad=cantidad, fecha_ingreso=fecha, observacion=obs)
+        messages.success(request, "¡Insumo agregado con éxito!")
+    return redirect('registroInsu') # Redirige al nombre de la URL
 
-        Insumo.objects.create(
-            nombre=nombre,
-            cantidad=cantidad,
-            fecha_ingreso=fecha_ingreso,
-            observacion=observacion
-        )
-        messages.success(request, 'Insumo registrado correctamente.')
-        return redirect('registroInsu')
-    else:
-        # Si entras con GET, solo redirige o muestra formulario (opcional)
-        return redirect('registroInsu')
-def editar_insumo(request, pk):
-    insumo = get_object_or_404(insumos, pk=pk)
+# 3. Editar Insumo
+def editar_insumo(request, id):
+    insumo = get_object_or_404(Insumo, id=id)
     if request.method == 'POST':
         insumo.nombre = request.POST.get('nombre')
         insumo.cantidad = request.POST.get('cantidad')
         insumo.fecha_ingreso = request.POST.get('fecha_ingreso')
         insumo.observacion = request.POST.get('observacion')
         insumo.save()
-        messages.success(request, 'Insumo actualizado correctamente.')
-        return redirect('registroInsu')
-    return render(request, 'editar_insumo.html', {'insumo': insumo})
-def eliminar_insumo(request, pk):
-    insumo = get_object_or_404(insumos, pk=pk)
+        messages.success(request, "¡Insumo actualizado!")
+        return redirect('registroInsu') # Cambia 'lista_insumos' por 'registroInsu'
+    return redirect('registroInsu')
+
+def eliminar_insumo(request, id):
+    insumo = get_object_or_404(Insumo, id=id)
     if request.method == 'POST':
         insumo.delete()
-        messages.success(request, 'Insumo eliminado correctamente.')
-        return redirect('registroInsu')
-    return render(request, 'eliminar_insumo.html', {'insumo': insumo})
+        messages.success(request, "Insumo eliminado correctamente.")
+    return redirect('registroInsu') # Cambia 'lista_insumos' por 'registroInsu'

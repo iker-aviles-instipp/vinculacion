@@ -28,9 +28,12 @@ path("documentacion/eliminar/<int:documento_id>/", views.eliminar_documento, nam
 
 
     # INSUMOS
-    path('crear_insumo/', views.crear_insumo, name='crear_insumo'),
-    path('registroInsu/editar/<int:pk>/', views.editar_insumo, name='editar_insumo'),
-    path('registroInsu/eliminar/<int:pk>/', views.eliminar_insumo, name='eliminar_insumo'),
+    path('registroInsu/', views.registroInsu, name='registroInsu'),
+    
+    # Rutas de acción
+    path('insumos/crear/', views.crear_insumo, name='crear_insumo'),
+    path('insumos/editar/<int:id>/', views.editar_insumo, name='editar_insumo'),
+    path('insumos/eliminar/<int:id>/', views.eliminar_insumo, name='eliminar_insumo'),
     # Rutas para el reseteo de contraseña
     path('reset_password/', 
          auth_views.PasswordResetView.as_view(template_name="password_reset_form.html"), 
@@ -50,5 +53,6 @@ path("documentacion/eliminar/<int:documento_id>/", views.eliminar_documento, nam
 
     path('api/', include('api_rest.urls')),
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
+
   
 ]
