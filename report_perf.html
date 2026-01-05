@@ -2,7 +2,7 @@
 <html>
   <head>
     <meta charset="utf-8"/>
-    <title id="head-title">reporte_perf.html</title>
+    <title id="head-title">report_perf.html</title>
       <style type="text/css">body {
   font-family: Helvetica, Arial, sans-serif;
   font-size: 12px;
@@ -327,8 +327,8 @@ div.media {
     
   </head>
   <body>
-    <h1 id="title">reporte_perf.html</h1>
-    <p>Report generated on 02-Jan-2026 at 10:28:33 by <a href="https://pypi.python.org/pypi/pytest-html">pytest-html</a>
+    <h1 id="title">report_perf.html</h1>
+    <p>Report generated on 02-Jan-2026 at 10:40:27 by <a href="https://pypi.python.org/pypi/pytest-html">pytest-html</a>
         v4.1.1</p>
     <div id="environment-header">
       <h2>Environment</h2>
@@ -382,7 +382,7 @@ div.media {
         <h2>Summary</h2>
         <div class="additional-summary prefix">
         </div>
-        <p class="run-count">1 test took 00:00:11.</p>
+        <p class="run-count">1 test took 00:00:03.</p>
         <p class="filter">(Un)check the boxes to filter the results.</p>
         <div class="summary__reload">
           <div class="summary__reload__button hidden" onclick="location.reload()">
@@ -392,10 +392,10 @@ div.media {
         <div class="summary__spacer"></div>
         <div class="controls">
           <div class="filters">
-            <input checked="true" class="filter" name="filter_checkbox" type="checkbox" data-test-result="failed" />
-            <span class="failed">1 Failed,</span>
-            <input checked="true" class="filter" name="filter_checkbox" type="checkbox" data-test-result="passed" disabled/>
-            <span class="passed">0 Passed,</span>
+            <input checked="true" class="filter" name="filter_checkbox" type="checkbox" data-test-result="failed" disabled/>
+            <span class="failed">0 Failed,</span>
+            <input checked="true" class="filter" name="filter_checkbox" type="checkbox" data-test-result="passed" />
+            <span class="passed">1 Passed,</span>
             <input checked="true" class="filter" name="filter_checkbox" type="checkbox" data-test-result="skipped" disabled/>
             <span class="skipped">0 Skipped,</span>
             <input checked="true" class="filter" name="filter_checkbox" type="checkbox" data-test-result="xfailed" disabled/>
@@ -429,7 +429,7 @@ div.media {
     </table>
   </body>
   <footer>
-    <div id="data-container" data-jsonblob="{&#34;environment&#34;: {&#34;Python&#34;: &#34;3.13.4&#34;, &#34;Platform&#34;: &#34;Windows-11-10.0.26200-SP0&#34;, &#34;Packages&#34;: {&#34;pytest&#34;: &#34;9.0.0&#34;, &#34;pluggy&#34;: &#34;1.6.0&#34;}, &#34;Plugins&#34;: {&#34;django&#34;: &#34;4.11.1&#34;, &#34;html&#34;: &#34;4.1.1&#34;, &#34;metadata&#34;: &#34;3.1.1&#34;}, &#34;JAVA_HOME&#34;: &#34;C:\\Program Files (x86)\\Eclipse Adoptium\\jdk-8.0.442.6-hotspot\\&#34;}, &#34;tests&#34;: {&#34;paciente/tests/perf/test_stress_burst.py::test_burst_stress_login&#34;: [{&#34;extras&#34;: [], &#34;result&#34;: &#34;Failed&#34;, &#34;testId&#34;: &#34;paciente/tests/perf/test_stress_burst.py::test_burst_stress_login&#34;, &#34;duration&#34;: &#34;00:00:11&#34;, &#34;resultsTableRow&#34;: [&#34;&lt;td class=\&#34;col-result\&#34;&gt;Failed&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-testId\&#34;&gt;paciente/tests/perf/test_stress_burst.py::test_burst_stress_login&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-duration\&#34;&gt;00:00:11&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-links\&#34;&gt;&lt;/td&gt;&#34;], &#34;log&#34;: &#34;live_server = &amp;lt;LiveServer listening at http://localhost:49193&amp;gt;\n\n    @pytest.mark.perf\n    def test_burst_stress_login(live_server):\n        &amp;quot;&amp;quot;&amp;quot;\n        R\u00e1faga concurrente de requests (GET) al login para medir estabilidad.\n        &amp;quot;&amp;quot;&amp;quot;\n    \n        # --- ADAPTACI\u00d3N CLAVE: Obtener la URL de login ---\n        # Asumo que el nombre de tu vista de login en urls.py es &amp;#x27;login&amp;#x27;.\n        login_url_path = reverse(&amp;#x27;login&amp;#x27;)\n        url = f&amp;quot;{live_server.url}{login_url_path}&amp;quot;\n    \n        print(f&amp;quot;\\n--- Burst Test ---&amp;quot;)\n        print(f&amp;quot;URL: {url}&amp;quot;)\n        print(f&amp;quot;Concurrent Users (Threads): {USERS}&amp;quot;)\n        print(f&amp;quot;Total Requests: {REQUESTS}&amp;quot;)\n        print(f&amp;quot;SLA P95: {P95_MS} ms | Max Error Rate: {ERROR_RATE_MAX:.1%}&amp;quot;)\n        # ------------------------------------------------\n    \n        latencies = []\n        errors = 0\n    \n        def shoot(_):\n            &amp;quot;&amp;quot;&amp;quot;Funci\u00f3n que realiza un solo request y mide la latencia.&amp;quot;&amp;quot;&amp;quot;\n            t0 = time.perf_counter()\n            try:\n                # Timeout para la solicitud de 5 segundos\n                r = requests.get(url, timeout=5)\n                # Se considera OK si el status est\u00e1 en el rango 2xx o 3xx\n                ok = (200 &amp;lt;= r.status_code &amp;lt; 400)\n            except Exception:\n                # Error de conexi\u00f3n o timeout\n                ok = False\n            dt = (time.perf_counter() - t0) * 1000\n            return ok, dt\n    \n        with ThreadPoolExecutor(max_workers=USERS) as ex:\n            futures = [ex.submit(shoot, i) for i in range(REQUESTS)]\n            for fut in as_completed(futures):\n                ok, ms = fut.result()\n                if ok:\n                    latencies.append(ms)\n                else:\n                    errors += 1\n    \n        total = REQUESTS\n        error_rate = errors / total\n    \n        # C\u00e1lculo de m\u00e9tricas\n        p95 = percentile(latencies, 95) if latencies else float(&amp;quot;inf&amp;quot;)\n        avg = sum(latencies) / len(latencies) if latencies else float(&amp;quot;inf&amp;quot;)\n    \n        print(f&amp;quot;Results: Avg={avg:.1f} ms | P95={p95:.1f} ms | Errors={errors}&amp;quot;)\n    \n        # --- Assertions (Verificaciones Funcionales y No Funcionales) ---\n    \n        # 1. Tasa de error (funcionalidad y estabilidad)\n        assert error_rate &amp;lt;= ERROR_RATE_MAX, f&amp;quot;FALLO: Tasa de error {error_rate:.1%} &amp;gt; {ERROR_RATE_MAX:.1%} (Errores: {errors}/{total})&amp;quot;\n    \n        # 2. Latencia P95 (rendimiento)\n&amp;gt;       assert p95 &amp;lt;= P95_MS, f&amp;quot;FALLO: P95 {p95:.1f} ms &amp;gt; {P95_MS} ms (Latencia promedio: {avg:.1f} ms)&amp;quot;\nE       AssertionError: FALLO: P95 2554.9 ms &amp;gt; 2500 ms (Latencia promedio: 2087.5 ms)\nE       assert 2554.914739994274 &amp;lt;= 2500\n\npaciente\\tests\\perf\\test_stress_burst.py:89: AssertionError\n\n----------------------------- Captured stdout call -----------------------------\n\n--- Burst Test ---\nURL: http://localhost:49193/login/\nConcurrent Users (Threads): 20\nTotal Requests: 100\nSLA P95: 2500 ms | Max Error Rate: 5.0%\nResults: Avg=2087.5 ms | P95=2554.9 ms | Errors=0\n&#34;}]}, &#34;renderCollapsed&#34;: [&#34;passed&#34;], &#34;initialSort&#34;: &#34;result&#34;, &#34;title&#34;: &#34;reporte_perf.html&#34;}"></div>
+    <div id="data-container" data-jsonblob="{&#34;environment&#34;: {&#34;Python&#34;: &#34;3.13.4&#34;, &#34;Platform&#34;: &#34;Windows-11-10.0.26200-SP0&#34;, &#34;Packages&#34;: {&#34;pytest&#34;: &#34;9.0.0&#34;, &#34;pluggy&#34;: &#34;1.6.0&#34;}, &#34;Plugins&#34;: {&#34;django&#34;: &#34;4.11.1&#34;, &#34;html&#34;: &#34;4.1.1&#34;, &#34;metadata&#34;: &#34;3.1.1&#34;}, &#34;JAVA_HOME&#34;: &#34;C:\\Program Files (x86)\\Eclipse Adoptium\\jdk-8.0.442.6-hotspot\\&#34;}, &#34;tests&#34;: {&#34;paciente/tests/perf/test_latency_sla.py::test_login_page_latency_sla&#34;: [{&#34;extras&#34;: [], &#34;result&#34;: &#34;Passed&#34;, &#34;testId&#34;: &#34;paciente/tests/perf/test_latency_sla.py::test_login_page_latency_sla&#34;, &#34;duration&#34;: &#34;00:00:03&#34;, &#34;resultsTableRow&#34;: [&#34;&lt;td class=\&#34;col-result\&#34;&gt;Passed&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-testId\&#34;&gt;paciente/tests/perf/test_latency_sla.py::test_login_page_latency_sla&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-duration\&#34;&gt;00:00:03&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-links\&#34;&gt;&lt;/td&gt;&#34;], &#34;log&#34;: &#34;----------------------------- Captured stdout call -----------------------------\n\n--- Probando SLA: 2500 ms en http://localhost:55304/login/ ---\nLatencia medida: 2055.8 ms\n&#34;}]}, &#34;renderCollapsed&#34;: [&#34;passed&#34;], &#34;initialSort&#34;: &#34;result&#34;, &#34;title&#34;: &#34;report_perf.html&#34;}"></div>
     <script>
       (function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!f&&c)return c(i,!0);if(u)return u(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u="function"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r})()({1:[function(require,module,exports){
 const { getCollapsedCategory, setCollapsedIds } = require('./storage.js')
